@@ -11,6 +11,7 @@ const tsconfig = require('./tsconfig.json')
 const PROJ_DIR = __dirname
 const SOURCE_DIR = Path.join(PROJ_DIR, 'src') 
 const DIST_DIR = Path.join(PROJ_DIR, 'dist') 
+const UMD_DIR = Path.join(PROJ_DIR, 'umd') 
 
 Gulp.task('clear', function (cb) {
   Rimraf.sync(DIST_DIR)
@@ -25,10 +26,10 @@ Gulp.task('copy', function () {
            .pipe(Gulp.dest(DIST_DIR))
 })
 
-Gulp.task('build-browser', function compileComponents() {
+Gulp.task('build-umd', function compileComponents() {
   var ws = Webpack({
     output: {
-      filename: 'react-channel.web.min.js',
+      filename: 'react-channel.min.js',
       libraryTarget: "umd",
       library: "ReactChannel"
     },
@@ -63,45 +64,19 @@ Gulp.task('build-browser', function compileComponents() {
             base: SOURCE_DIR
           })
           .pipe(ws)
-          .pipe(Gulp.dest(DIST_DIR))
+          .pipe(Gulp.dest(UMD_DIR))
 })
 
-Gulp.task('build-browser-test', function compileComponents() {
-  var ws = Webpack({
-    output: {
-      filename: 'test.web.js',
-    },
-    resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
-    },
-    externals: [
-      {
-        'react': 'React',
-        'react-dom': 'ReactDOM',
-        'react-channel': 'ReactChannel'
-      }
-    ],
-    module: {
-      rules: [
-        { 
-          test: /\.tsx$/, 
-          use: ['awesome-typescript-loader'],
-          exclude: /node_modules/
-        }
-      ]
-    }
-  }).on('error', function (error) {
-    console.error(error.toString())
-    this.emit('end')
-  })
+Gulp.task('builder-common', function () {
+// 编译　ts 文件
   return Gulp
-          .src(Path.join(SOURCE_DIR, './test.tsx'), {
-            base: SOURCE_DIR
-          })
-          .pipe(ws)
-          .pipe(Gulp.dest(DIST_DIR))
+           .src(Path.join(SOURCE_DIR, './react-channel.tsx'), {
+             base: SOURCE_DIR
+           })
+           .pipe(Typescript(tsconfig.compilerOptions))
+           .pipe(Gulp.dest(DIST_DIR))
 })
 
-Gulp.task('build', ['clear', 'copy', 'build-browser', 'build-browser-test'])
+Gulp.task('build', ['clear', 'copy', 'build-umd', 'builder-common'])
 
 
