@@ -48,6 +48,8 @@ declare namespace ReactChannel {
     PA extends IAction = IAction,
     SA extends IAction = IAction
   > extends Component<P> {
+    protected publisher: Publisher<PA> 
+    protected subscriber: Subscriber<SA>
     constructor(props: P) 
     public componentWillUnmount(): void
   }
