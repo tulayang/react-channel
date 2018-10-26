@@ -14,15 +14,18 @@ declare namespace ReactChannel {
     public items(): Iterable<Channel>
     public pub(a: A): void
     public attach(c: Channel): void
-    public detach(c?: Channel): void
+    public detach(c: Channel): void
+    public detachAll(): void
   }
 
   export class Channel<A extends IAction = IAction> {
     constructor(...actionFilter: Array<string>)
     public attachPublisher(p: Publisher) : void
-    public detachPublisher(): void
+    public detachPublisher(p: Publisher): void
+    public detachAllPublisher(): void
     public attachSubscriber(s: Subscriber): void
-    public detachSubscriber(): boolean
+    public detachSubscriber(s: Subscriber): boolean
+    public detachAllSubscriber(): void
     public pub(a: A): void
   }
 
@@ -35,7 +38,8 @@ declare namespace ReactChannel {
     public notify(a: A): void
     public sub(cb: (a: A) => void): void
     public attach(c: Channel): void
-    public detach(c?: Channel): void
+    public detach(c: Channel): void
+    public detachAll(): void
   }
 
   export interface IActionComponentProps {

@@ -8,7 +8,10 @@
                     +--------> Channel (filter) ---------> Subscriber - Com                      
                                                          ^
                                                          |
-    Com - Publisher +--------> Channel (filter) ---------+
+    Com - Publisher ---------> Channel (filter) +--------+
+                             ^                  |
+                             |                  |
+    Com - Publisher --------->                  +--------> Subscriber - Com
 
     
   - Publisher 和 Subscriber 之间是独立管理的。如果没有 Publisher 与 Subscriber 连接，
@@ -17,7 +20,7 @@
 
   - 消息总是从 Publisher 发出，通过 Channel (filter)，到达 Subscriber
 
-  - 一个 Channel 只与一个 Publisher、Subscriber 连接
+  - 一个 Channel 可以连接多个 Publisher、Subscriber
 
   - 一个 Publisher 可以连接多个 Channel (filter) 
 
@@ -64,7 +67,7 @@ export abstract class ActionComponent<
   //
   // 注意：这个操作有助于防止内存泄漏（GC 双引用）
   componentWillUnmount() {
-    this.publisher.detach()
-    this.subscriber.detach()
+    this.publisher.detachAll()
+    this.subscriber.detachAll()
   }
 }

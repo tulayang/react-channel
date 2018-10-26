@@ -33,8 +33,8 @@ var ActionComponent = (function (_super) {
         return _this;
     }
     ActionComponent.prototype.componentWillUnmount = function () {
-        this.publisher.detach();
-        this.subscriber.detach();
+        this.publisher.detachAll();
+        this.subscriber.detachAll();
     };
     return ActionComponent;
 }(react_1.Component));
