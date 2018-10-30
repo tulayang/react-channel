@@ -71,3 +71,19 @@ export abstract class ActionComponent<P extends IActionComponentProps, S extends
     this.subscriber.detachAll()
   }
 }
+
+export abstract class ActionStore {
+  protected publisher: Publisher = new Publisher()
+  protected subscriber: Subscriber = new Subscriber()
+
+  constructor(channel: Channel) {
+    this.publisher.attach(channel)
+    this.subscriber.attach(channel)
+  }
+
+  public close() {
+    this.publisher.detachAll()
+    this.subscriber.detachAll()
+  }
+}
+

@@ -43,3 +43,17 @@ var ActionComponent = (function (_super) {
     return ActionComponent;
 }(react_1.Component));
 exports.ActionComponent = ActionComponent;
+var ActionStore = (function () {
+    function ActionStore(channel) {
+        this.publisher = new m_channel_1.Publisher();
+        this.subscriber = new m_channel_1.Subscriber();
+        this.publisher.attach(channel);
+        this.subscriber.attach(channel);
+    }
+    ActionStore.prototype.close = function () {
+        this.publisher.detachAll();
+        this.subscriber.detachAll();
+    };
+    return ActionStore;
+}());
+exports.ActionStore = ActionStore;

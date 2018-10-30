@@ -51,6 +51,14 @@ declare namespace ReactChannel {
     public componentWillReceiveProps(nextProps: Readonly<IActionComponentProps>): void
     public componentWillUnmount(): void
   }
+
+  export abstract class ActionStore {
+    protected publisher: Publisher
+    protected subscriber: Subscriber
+
+    constructor(channel: Channel)
+    public close(): void
+  }
 } 
 
 export = ReactChannel
