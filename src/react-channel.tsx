@@ -44,7 +44,7 @@ export interface IActionComponentProps {
   channel: Channel
 }
 
-export abstract class ActionComponent<P extends IActionComponentProps, S extends ComponentState> extends Component<P, S> {
+export abstract class ActionComponent<P extends IActionComponentProps, S extends ComponentState = any> extends Component<P, S> {
   protected publisher: Publisher = new Publisher()
   protected subscriber: Subscriber = new Subscriber()
 
