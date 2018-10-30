@@ -1,24 +1,20 @@
 
-import { Component } from 'react'
+import { Component, ComponentState } from 'react'
 
 declare namespace ReactChannel {
-  export interface IAction {
-    action: string
-  }
-
-  export class Publisher<A extends IAction = IAction> {
+  export class Publisher {
     public add(c: Channel): void
     public del(c: Channel): void
     public replace(c1: Channel, c2: Channel): void
     public has(c: Channel): boolean
     public items(): Iterable<Channel>
-    public pub(a: A): void
+    public pub<A, B>(topic: string, payload: A, confirm?: (payload?: B) => void): void
     public attach(c: Channel): void
     public detach(c: Channel): void
     public detachAll(): void
   }
 
-  export class Channel<A extends IAction = IAction> {
+  export class Channel {
     constructor(...actionFilter: Array<string>)
     public attachPublisher(p: Publisher) : void
     public detachPublisher(p: Publisher): void
@@ -26,35 +22,33 @@ declare namespace ReactChannel {
     public attachSubscriber(s: Subscriber): void
     public detachSubscriber(s: Subscriber): boolean
     public detachAllSubscriber(): void
-    public pub(a: A): void
+    public pub<A, B>(topic: string, payload: A, confirm?: (payload?: B) => void): void
   }
 
-  export class Subscriber<A extends IAction = IAction> {
+  export class Subscriber {
     public add(c: Channel): void
     public del(c: Channel): void
     public replace(c1: Channel, c2: Channel): void
     public has(c: Channel): boolean
     public items(): Iterable<Channel>
-    public notify(a: A): void
-    public sub(cb: (a: A) => void): void
+    public notify<A, B>(topic: string, payload: A, confirm?: (payload?: B) => void): void
+    public sub<A, B>(topic: string, cb: (payload: A, confirm?: (payload?: B) => void) => void): void
+    public unsub(topic: string): void
+    public unsubAll(): void
     public attach(c: Channel): void
     public detach(c: Channel): void
     public detachAll(): void
   }
 
   export interface IActionComponentProps {
-    pub?: (p: Publisher) => void
-    sub?: (s: Subscriber) => void
+    channel: Channel
   }
 
-  export abstract class ActionComponent<
-    P extends IActionComponentProps, 
-    PA extends IAction = IAction,
-    SA extends IAction = IAction
-  > extends Component<P> {
-    protected publisher: Publisher<PA> 
-    protected subscriber: Subscriber<SA>
+  export abstract class ActionComponent<P extends IActionComponentProps, S extends ComponentState> extends Component<P, S>  {
+    protected publisher: Publisher
+    protected subscriber: Subscriber
     constructor(props: P) 
+    public componentWillReceiveProps(nextProps: Readonly<IActionComponentProps>): void
     public componentWillUnmount(): void
   }
 } 

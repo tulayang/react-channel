@@ -35,31 +35,31 @@
   - Channel (filter) 只负责流动消息，同时可以提供过滤器，只允许特殊条件的消息流动
 */
 
-import { Component } from 'react'
-import { Publisher, Subscriber, Channel, IAction } from 'm-channel'
+import { Component, ComponentState } from 'react'
+import { Publisher, Subscriber, Channel } from 'm-channel'
 
-export { Publisher, Subscriber, Channel, IAction }
+export { Publisher, Subscriber, Channel }
 
 export interface IActionComponentProps {
-  pub?: (p: Publisher) => void
-  sub?: (s: Subscriber) => void
+  channel: Channel
 }
 
-export abstract class ActionComponent<
-  P extends IActionComponentProps, 
-  PA extends IAction = IAction,
-  SA extends IAction = IAction
-> extends Component<P> {
-  protected publisher: Publisher<PA> = new Publisher<PA>()
-  protected subscriber: Subscriber<SA> = new Subscriber<SA>()
+export abstract class ActionComponent<P extends IActionComponentProps, S extends ComponentState> extends Component<P, S> {
+  protected publisher: Publisher = new Publisher()
+  protected subscriber: Subscriber = new Subscriber()
 
   constructor(props: P) {
     super(props)
-    if (typeof this.props.pub === 'function') {
-      this.props.pub(this.publisher)
-    }
-    if (typeof this.props.sub === 'function') {
-      this.props.sub(this.subscriber)
+    this.publisher.attach(this.props.channel)
+    this.subscriber.attach(this.props.channel)
+  }
+
+  componentWillReceiveProps(nextProps: Readonly<IActionComponentProps>) {
+    if (nextProps.channel !== this.props.channel) {
+      this.publisher.detachAll()
+      this.subscriber.detachAll()
+      this.publisher.attach(nextProps.channel)
+      this.subscriber.attach(nextProps.channel)
     }
   }
 

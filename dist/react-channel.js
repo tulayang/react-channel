@@ -24,14 +24,18 @@ var ActionComponent = (function (_super) {
         var _this = _super.call(this, props) || this;
         _this.publisher = new m_channel_1.Publisher();
         _this.subscriber = new m_channel_1.Subscriber();
-        if (typeof _this.props.pub === 'function') {
-            _this.props.pub(_this.publisher);
-        }
-        if (typeof _this.props.sub === 'function') {
-            _this.props.sub(_this.subscriber);
-        }
+        _this.publisher.attach(_this.props.channel);
+        _this.subscriber.attach(_this.props.channel);
         return _this;
     }
+    ActionComponent.prototype.componentWillReceiveProps = function (nextProps) {
+        if (nextProps.channel !== this.props.channel) {
+            this.publisher.detachAll();
+            this.subscriber.detachAll();
+            this.publisher.attach(nextProps.channel);
+            this.subscriber.attach(nextProps.channel);
+        }
+    };
     ActionComponent.prototype.componentWillUnmount = function () {
         this.publisher.detachAll();
         this.subscriber.detachAll();

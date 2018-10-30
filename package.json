@@ -1,6 +1,6 @@
 {
   "name": "react-channel",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Message flow channel",
   "author": {
     "name": "Wang Tong"
@@ -22,7 +22,7 @@
     "webpack-stream": "^4.0.3"
   },
   "dependencies": {
-    "m-channel": "^0.1.4"
+    "m-channel": "^0.1.6"
   },
   "engines": {
     "node": ">=8.9.4"
