@@ -8,7 +8,7 @@ declare namespace ReactChannel {
     public replace(c1: Channel, c2: Channel): void
     public has(c: Channel): boolean
     public items(): Iterable<Channel>
-    public pub<A, B>(topic: string, payload: A, confirm?: (payload?: B) => void): void
+    public pub<A, B>(topic: string, payload?: A, confirm?: (payload?: B) => void): void
     public attach(c: Channel): void
     public detach(c: Channel): void
     public detachAll(): void
@@ -22,7 +22,7 @@ declare namespace ReactChannel {
     public attachSubscriber(s: Subscriber): void
     public detachSubscriber(s: Subscriber): boolean
     public detachAllSubscriber(): void
-    public pub<A, B>(topic: string, payload: A, confirm?: (payload?: B) => void): void
+    public pub<A, B>(topic: string, payload?: A, confirm?: (payload?: B) => void): void
   }
 
   export class Subscriber {
@@ -31,8 +31,8 @@ declare namespace ReactChannel {
     public replace(c1: Channel, c2: Channel): void
     public has(c: Channel): boolean
     public items(): Iterable<Channel>
-    public notify<A, B>(topic: string, payload: A, confirm?: (payload?: B) => void): void
-    public sub<A, B>(topic: string, cb: (payload: A, confirm?: (payload?: B) => void) => void): void
+    public notify<A, B>(topic: string, payload?: A, confirm?: (payload?: B) => void): void
+    public sub<A, B>(topic: string, cb: (payload?: A, confirm?: (payload?: B) => void) => void): void
     public unsub(topic: string): void
     public unsubAll(): void
     public attach(c: Channel): void
