@@ -24,6 +24,7 @@ var ActionComponent = (function (_super) {
         var _this = _super.call(this, props) || this;
         _this.publisher = new m_channel_1.Publisher();
         _this.subscriber = new m_channel_1.Subscriber();
+        _this.state = Object.create(null);
         if (_this.props.channel instanceof m_channel_1.Channel) {
             _this.publisher.attach(_this.props.channel);
             _this.subscriber.attach(_this.props.channel);

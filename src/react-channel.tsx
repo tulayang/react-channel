@@ -47,6 +47,7 @@ export interface IActionComponentProps {
 export abstract class ActionComponent<P extends IActionComponentProps, S extends ComponentState = any> extends Component<P, S> {
   protected publisher: Publisher = new Publisher()
   protected subscriber: Subscriber = new Subscriber()
+  public state: S = Object.create(null)
 
   constructor(props: P) {
     super(props)
