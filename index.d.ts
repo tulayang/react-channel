@@ -41,7 +41,7 @@ declare namespace ReactChannel {
   }
 
   export interface IActionComponentProps {
-    channel: Channel
+    channel?: Channel
   }
 
   export abstract class ActionComponent<P extends IActionComponentProps, S extends ComponentState = any> extends Component<P, S>  {

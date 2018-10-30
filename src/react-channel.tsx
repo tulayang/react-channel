@@ -41,7 +41,7 @@ import { Publisher, Subscriber, Channel } from 'm-channel'
 export { Publisher, Subscriber, Channel }
 
 export interface IActionComponentProps {
-  channel: Channel
+  channel?: Channel
 }
 
 export abstract class ActionComponent<P extends IActionComponentProps, S extends ComponentState = any> extends Component<P, S> {
@@ -50,16 +50,22 @@ export abstract class ActionComponent<P extends IActionComponentProps, S extends
 
   constructor(props: P) {
     super(props)
-    this.publisher.attach(this.props.channel)
-    this.subscriber.attach(this.props.channel)
+    if (this.props.channel instanceof Channel) {
+      this.publisher.attach(this.props.channel)
+      this.subscriber.attach(this.props.channel)
+    }
   }
 
   componentWillReceiveProps(nextProps: Readonly<IActionComponentProps>) {
     if (nextProps.channel !== this.props.channel) {
-      this.publisher.detachAll()
-      this.subscriber.detachAll()
-      this.publisher.attach(nextProps.channel)
-      this.subscriber.attach(nextProps.channel)
+      if (this.props.channel instanceof Channel) {
+        this.publisher.detachAll()
+        this.subscriber.detachAll()
+      }
+       if (nextProps.channel instanceof Channel) {
+        this.publisher.attach(nextProps.channel)
+        this.subscriber.attach(nextProps.channel)
+      }
     }
   }
 
